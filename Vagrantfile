@@ -1,0 +1,56 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+
+Vagrant.configure("2") do |config|
+  #  Configure base
+  config.vm.box = 'centos/7'
+
+
+  # Puppet Enterprise 2019 and Puppet Tasks
+  config.vm.define "master" do |master|
+      master.vm.hostname = "master.infra.vm"
+      master.vm.network :private_network, :ip => "192.168.77.100"
+      master.vm.provision :hosts, :sync_hosts => true
+
+      # Start postInstall
+      master.vm.provision "shell", path: "./PuppetServer/install.sh"
+
+      master.vm.provider :libvirt do |setting|
+           setting.memory = 4028
+           setting.cpus = 2
+      end
+   end
+
+  # GitLab Server e Runner 
+  config.vm.define "git" do |git|
+      git.vm.hostname = "git.infra.vm"
+      git.vm.network :private_network, :ip => "192.168.77.101"
+      git.vm.provision :hosts, :sync_hosts => true
+
+      # Start postInstall
+         git.vm.provision "shell", inline: "curl -k https://master.infra.vm:8140/packages/current/install.bash | sudo bash"
+
+      #master.vm.provider :virtualbox do |setting|
+      git.vm.provider :libvirt do |setting|
+           setting.memory = 2048
+           setting.cpus = 1
+      end
+   end
+
+  # DevOps Tools 
+  config.vm.define "devops" do |devops|
+      devops.vm.hostname = "devops.infra.vm"
+      devops.vm.provision :hosts, :sync_hosts => true
+      devops.vm.network :private_network, :ip => "192.168.77.102"
+
+      # Start postInstall
+         devops.vm.provision "shell", inline: "curl -k https://master.infra.vm:8140/packages/current/install.bash | sudo bash"
+
+      #master.vm.provider :virtualbox do |setting|
+      devops.vm.provider :libvirt do |setting|
+           setting.memory = 2048
+           setting.cpus = 1
+      end
+   end
+end
