@@ -1,0 +1,4 @@
+---
+runner::runner_name  : 'gitlab'
+runner::runner_url   : 'http://git.infra.vm'
+runner::runner_token : '91whjpU9M6o-kAsMgyru'
