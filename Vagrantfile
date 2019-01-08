@@ -28,8 +28,9 @@ Vagrant.configure("2") do |config|
       git.vm.network :private_network, :ip => "192.168.77.101"
       git.vm.provision :hosts, :sync_hosts => true
 
+
       # Start postInstall
-         git.vm.provision "shell", inline: "curl -k https://master.infra.vm:8140/packages/current/install.bash | sudo bash"
+         git.vm.provision "shell", path: "./runner/init.sh"
 
       #master.vm.provider :virtualbox do |setting|
       git.vm.provider :libvirt do |setting|
@@ -53,4 +54,21 @@ Vagrant.configure("2") do |config|
            setting.cpus = 1
       end
    end
+
+  # git-runner
+  config.vm.define "runner" do |runner|
+      runner.vm.hostname = "runner.infra.vm"
+      runner.vm.provision :hosts, :sync_hosts => true
+      runner.vm.network :private_network, :ip => "192.168.77.103"
+
+      # Start postInstall
+         runner.vm.provision "shell", inline: "curl -k https://master.infra.vm:8140/packages/current/install.bash | sudo bash"
+
+      #master.vm.provider :virtualbox do |setting|
+      runner.vm.provider :libvirt do |setting|
+           setting.memory = 1024
+           setting.cpus = 1
+      end
+   end
+
 end
