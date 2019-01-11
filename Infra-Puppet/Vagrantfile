@@ -1,7 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-
 Vagrant.configure("2") do |config|
   #  Configure base
   config.vm.box = 'centos/7'
@@ -16,6 +15,7 @@ Vagrant.configure("2") do |config|
       # Start postInstall
       master.vm.provision "shell", path: "./PuppetServer/install.sh"
 
+      #master.vm.provider :virtualbox do |setting|
       master.vm.provider :libvirt do |setting|
            setting.memory = 4028
            setting.cpus = 2
@@ -32,7 +32,7 @@ Vagrant.configure("2") do |config|
       # Start postInstall
          git.vm.provision "shell", path: "./runner/init.sh"
 
-      #master.vm.provider :virtualbox do |setting|
+      #git.vm.provider :virtualbox do |setting|
       git.vm.provider :libvirt do |setting|
            setting.memory = 2048
            setting.cpus = 1
@@ -55,20 +55,18 @@ Vagrant.configure("2") do |config|
       end
    end
 
-  # git-runner
-  config.vm.define "runner" do |runner|
-      runner.vm.hostname = "runner.infra.vm"
-      runner.vm.provision :hosts, :sync_hosts => true
-      runner.vm.network :private_network, :ip => "192.168.77.103"
+  # node1
+  config.vm.define "node" do |node|
+      node.vm.hostname = "node.infra.vm"
+      node.vm.provision :hosts, :sync_hosts => true
+      node.vm.network :private_network, :ip => "192.168.77.103"
 
       # Start postInstall
-         runner.vm.provision "shell", inline: "curl -k https://master.infra.vm:8140/packages/current/install.bash | sudo bash"
+      node.vm.provision "shell", inline: "curl -k https://master.infra.vm:8140/packages/current/install.bash | sudo bash"
 
-      #master.vm.provider :virtualbox do |setting|
-      runner.vm.provider :libvirt do |setting|
+      #node.vm.provider :virtualbox do |setting|
+      node.vm.provider :libvirt do |setting|
            setting.memory = 1024
            setting.cpus = 1
       end
    end
-
-end
