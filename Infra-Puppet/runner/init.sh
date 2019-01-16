@@ -11,9 +11,9 @@ vagrant plugin install vagrant-puppet-install
 
 
 #Sudoers
-/etc/sudoers 
-echo "Defaults:gitlab-runner  !requiretty"  >> /etc/sudoers
-echo "gitlab-runner  ALL=(ALL)  NOPASSWD:ALL" >> /etc/sudoers
+#/etc/sudoers 
+echo 'Defaults:gitlab-runner  !requiretty'  >> /etc/sudoers
+echo 'gitlab-runner  ALL=(ALL)  NOPASSWD:ALL' >> /etc/sudoers
 
 
 curl -k https://master.infra.vm:8140/packages/current/install.bash | sudo bash"

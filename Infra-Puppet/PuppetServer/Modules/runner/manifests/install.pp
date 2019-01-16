@@ -5,8 +5,14 @@
 # @example
 #   include runner::install
 class runner::install {
+   
+   user {'gitlab-runner':
+      ensure => 'present',
+   }
 
-
+   group {'gitlab-runner':
+      ensure => 'present',
+   }
    file { 'gitlab-runner':
      path   => '/usr/local/bin/gitlab-runner',
      ensure => 'file',

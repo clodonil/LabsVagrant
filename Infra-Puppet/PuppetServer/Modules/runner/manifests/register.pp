@@ -14,14 +14,14 @@ class runner::register (
   exec { 'register':
     command => "gitlab-runner register --non-interactive --url='${runner_url}' --registration-token '${runner_token}' --name '${runner_name}' --executor 'shell'",
     path    => ["/usr/local/bin/","/bin/","/usr/bin","/usr/sbin","/usr/local/bin/"],
-    unless  => 'test ! -e /etc/gitlab-runner/config.toml',
+    unless  => 'test  -e /etc/gitlab-runner/config.toml',
   }
 
   # install
   exec { 'install':
     command => 'gitlab-runner install --user gitlab-runner --working-directory /runner/',
     path    => ["/usr/local/bin/","/bin/","/usr/bin","/usr/sbin","/usr/local/bin/"],
-    unless  =>  'test ! -e /etc/systemd/system/gitlab-runner.service', 
+    unless  =>  'test -e /etc/systemd/system/gitlab-runner.service', 
 
   }
 

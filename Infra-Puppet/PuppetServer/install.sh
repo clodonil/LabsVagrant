@@ -23,6 +23,8 @@ systemctl reload pe-puppetserver
 #Download do modulo do GitLab
 puppet module install puppet-gitlab --version 2.1.0
 
+# Copiando os módulos feitos
+cp -a /vagrant/PuppetServer/Modules/* /etc/puppetlabs/code/environments/production/modules/
 
 #r10k
 mkdir /etc/puppetlabs/puppetserver/ssh
