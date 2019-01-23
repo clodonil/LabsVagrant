@@ -1,0 +1,18 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "adrianovieira/centos7x64_minimal-puppet5"
+
+  config.vm.provider :libvirt do |libvirt|
+     libvirt.host = '192.168.77.1'
+     libvirt.connect_via_ssh = true
+     libvirt.username = 'root'
+  end
+
+  config.vm.synced_folder '.', '/vagrant', disabled: true
+  config.vm.provision "puppet" do |puppet| 
+     puppet.manifests_path = "./manifests"
+     puppet.manifest_file = "init.pp"
+     puppet.environment_path = "/etc/puppetlabs/code/environments"
+     puppet.environment = "production"
+     #puppet.options = "--verbose --debug"
+  end
+end

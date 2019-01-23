@@ -1,0 +1,7 @@
+Vagrant.configure("2") do |config|
+  config.vm.provision "docker" do |d|
+     d.image = "nginx"
+#    d.run "web", image: "nginx:latest"
+#    d.run "db", image: "mysql"
+  end
+end
